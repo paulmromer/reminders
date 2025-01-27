@@ -1,5 +1,5 @@
 .venv
-reminders/.jupyter
+/.jupyter
 ipynb_checkpoints
 .DS_Store
 .virtual_documents
