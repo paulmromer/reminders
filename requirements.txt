@@ -1,0 +1,13 @@
+jupyterlab-git
+jupyterlab-spellchecker
+jupyterlab-code-formatter
+black
+isort
+jupyterlab-lsp
+python-lsp-server[all]
+pycodestyle
+pyflakes
+matplotlib
+numpy
+scipy
+jupyterlab

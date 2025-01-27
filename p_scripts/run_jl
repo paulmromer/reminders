@@ -1,0 +1,36 @@
+#!/usr/bin/env python -X utf8
+
+from os import environ, chdir
+from pathlib import Path
+from subprocess import run
+from sys import platform 
+reminders = Path.home() / "reminders"
+# Create an environment variable for the virtual environment
+environ["PYTHONUTF8"] = "1"
+environ["VIRTUAL_ENV"] = str((reminders / ".venv").resolve())
+environ["VIRTUAL_ENV_PROMPT"] = "(.venv)"
+
+# Set the env vars that tell JupyterLab where to find settings it needs
+environ["JUPYTERLAB_SETTINGS_DIR"] = str(reminders / ".jupyter")
+environ["JUPYTER_DATA_DIR"] = str(reminders / ".jupyter/data")
+environ["JUPYTER_CONFIG_DIR"] = str(reminders / ".jupyter/config")
+
+chdir(reminders)
+
+if platform == "darwin":
+    executbles = (reminders / ".venv/bin").resolve().resolve()
+    executble = (reminders / ".venv/bin/jupyter").resolve()
+else:
+    executbles = (reminders / ".venv/Scripts").resolve()
+    executble = (reminders / ".venv/Scripts/jupyter").resolve()
+
+executbles_s = str(executbles)
+executble_s = str(executble)
+
+# Change the PATH as if the venv is activated. 
+# Colon ok on Windows if using git-bash ???
+
+environ["PATH"] = executbles_s + ":" + environ["PATH"]
+run([ executble_s, "lab"])
+
+

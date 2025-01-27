@@ -1,0 +1,5 @@
+{
+    // Autolink URL replacement
+    // Whether to replace URLs with links or not.
+    "autolink": false
+}

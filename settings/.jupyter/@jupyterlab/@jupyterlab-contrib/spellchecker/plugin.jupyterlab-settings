@@ -1,0 +1,36 @@
+{
+    "theme": "background-box",
+    "language": "en-US",
+    "checkComments": true,
+    "checkStrings": false,
+    "debounceTime": 200,
+    "ignore": [
+        "JupyterLab",
+        "Jupyter",
+        "JupyterHub",
+        "Voilà",
+        "Xeus",
+        "IPython",
+        "Ed25519",
+        "cryptography",
+        "cryptographic",
+        "cryptographer",
+        "cryptosystem",
+        "cryptosystems",
+        "RSA",
+        "“",
+        "”",
+        "ʼ",
+        "hash",
+        "sidenote",
+        "sidenotes",
+        "SINO"
+    ],
+    "mimeTypes": [
+        "text/x-ipythongfm",
+        "text/x-rst",
+        "text/x-latex",
+        "text/x-rsrc"
+    ],
+    "onlineDictionaries": []
+}

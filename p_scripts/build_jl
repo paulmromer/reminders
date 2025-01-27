@@ -1,0 +1,260 @@
+#!/usr/bin/env python -X utf8
+
+from venv import create
+from pathlib import Path
+import subprocess
+from sys import argv, platform
+from os import chdir
+from pathlib import Path
+from shutil import rmtree
+
+# For creating and provisioning a group of files that will be used by 
+#     JupyterLab in a new directory called "reminders" in your home folder 
+#     on Windows or macOS.# 
+# Usage: 'build_jl c c c c c c'
+#     where c = e means 'enable' the extension and any other 
+#     character or an omitted character means 'disable'  
+# 
+# This script 
+#  - deletes any existing venv in the initial directory
+#  - creates a new venv
+#  - deletes any existing ".jupyter" folder 
+#  - creates a new ".jupyter" folder that has settings for JupyterLab
+
+########################## Delete Existing Directories  #######################
+
+
+reminders = Path.home() / "reminders"
+dv = reminders / ".venv"
+settings = reminders / "settings"
+
+if dv.exists():
+    try:
+        rmtree(dv)
+    except OSError:
+        rmtree(dv)
+
+if (reminders / ".jupyter").exists():
+    try:
+        rmtree(reminders / ".jupyter")
+    except OSError:
+        rmtree(reminders / ".jupyter")
+
+
+#######################  Enable/Disable JL Extensions #######################
+
+# Set default values for the disabled dictionary that specifies which 
+#    extensions will be disabled. 
+
+disabled = {
+    "spellchecker": True,
+    "formatter": True,
+    "git": True,
+    "linting": True,
+    "debugger": True,
+    "statusbar": True,
+}
+
+
+# Read the parameters, if any, use these to update the disabled dict
+for n, k in enumerate(disabled):
+    if n + 1 < len(argv):
+        if argv[n+1] == "e":
+            disabled[k] = False
+
+
+################# Create the venv and pip install libraries #################
+
+create(dv, clear=True, with_pip=True)
+
+if platform == "darwin":
+    exectble = Path.home() / "reminders/.venv/bin/python"
+else: 
+    exectble = Path.home() / "reminders/.venv/Scripts/python"
+
+exectble_s = str(exectble)
+subprocess.run([exectble_s, '-m', 'pip', 'install', '-r', 'requirements.txt'])
+
+# ##################### Functions for copying settings #########################
+# sample_content = Path.home() / "reminders/sample_content"
+
+def create_settings_dict(reminders = reminders, settings = settings):
+    """For a settings file, returns a dictionary with values 
+        - the source 
+        - its contents 
+        - the destination it will be written to.
+    The keys are identifiers extracted from the source path for each 
+    setting file. 
+    """
+    d = {}
+    excludes = [
+        "data",
+        "workspaces",
+        "migrated",
+        ".DS_Store"
+    ]
+
+    for q in (settings / ".jupyter").rglob("*"):
+        ex_tests = [ex in str(q) for ex in excludes]
+        if q.is_file():
+            if not any(ex_tests):
+                if q.name == "plugin.jupyterlab-settings":
+                    desc = q.parent.name
+                else:
+                    desc = q.name.replace(".jupyterlab-settings", "")
+                desc = desc.replace("-extension", '')
+                d[desc] = (
+                    q.resolve(),
+                    q.read_text(),
+                    reminders / q.relative_to(settings)
+                )
+    return d
+
+def copy_base():
+    """Copy base settings that are always used no matter which 
+    extensions are enabled.
+    """
+
+    d = create_settings_dict()
+    for desc in d.keys():
+        if desc not in [
+            "page_config.json",
+            "statusbar",
+            "spellchecker",
+            "jupyterlab-lsp",
+        ]:
+            d[desc][2].parent.mkdir(exist_ok=True, parents=True)
+            d[desc][2].write_text(d[desc][1])
+
+    return
+
+
+def enable_extensions(disabled = disabled):
+    """String together a series of new lines in a string s.
+    """
+    d = create_settings_dict()
+    s = '{\n'
+    s += " " * 4 + '"disabledExtensions": {\n'
+    new_line = '"@jupyterlab-contrib/spellchecker": '
+
+    if disabled["spellchecker"]:
+        new_line += 'true,\n'
+
+    else:
+        new_line += 'false,\n'
+    s += " " * 8 + new_line
+    new_line = '"jupyterlab_code_formatter": '
+
+    if disabled["formatter"]:
+        new_line += 'true,\n'        
+
+    else: 
+        new_line += 'false,\n'
+    s += " " * 8 + new_line
+    new_line1 = '"@jupyterlab/git": '
+    new_line2 = '"nbdime-jupyterlab": '
+
+    if disabled["git"]:
+        new_line1 += ' true,\n'
+        new_line2 += ' true,\n'
+
+    else:
+        new_line1 += ' false,\n'
+        new_line2 += ' false,\n'
+    s += " " * 8 + new_line1
+    s += " " * 8 + new_line2
+    new_line0 = '"@jupyter-lsp/jupyterlab-lsp": '
+    new_line1a = '"@jupyter-lsp/notebook-adapter": '
+    new_line1b = '"@jupyter-lsp/notebook-adapter": false,\n'
+    new_line2a = '"@jupyter-lsp/fileeditor-adapter": '
+    new_line2b = '"@jupyter-lsp/fileeditor-adapter": false,\n'
+
+    if disabled["linting"]:
+        new_line0 += 'true,\n'
+        s += " " * 8 + new_line0
+        new_line1a += 'true,\n'
+        s += " " * 8  + new_line1a
+        new_line2a += 'true,\n'
+        s += " " * 8  + new_line2a
+
+    else: 
+        new_line0 += 'false,\n'
+        s += " " * 8 + new_line0 + " " * 8 + new_line1b + " " * 8 + new_line2b
+    new_line = '"@jupyterlab/debugger-extension": '
+
+    if disabled["debugger"]:
+        new_line += 'true\n'
+    else:
+        new_line += 'false\n'
+    s += " " * 8 + new_line
+    s += " " * 4 + '}\n'
+    s += '}\n'
+    d['page_config.json'][2].parent.mkdir(exist_ok=True, parents=True)
+    d['page_config.json'][2].write_text(s)
+    return
+
+
+def copy_extension_settings():
+
+
+    """Copy settings that are needed if specific extensions are enabled.
+    """
+    d = create_settings_dict()
+    if not disabled["spellchecker"]:
+        d["spellchecker"][2].parent.mkdir(exist_ok=True, parents=True)
+        d["spellchecker"][2].write_text(d["spellchecker"][1])    
+        
+    if not disabled["linting"]:
+        d["jupyterlab-lsp"][2].parent.mkdir(exist_ok=True, parents=True)
+        d["jupyterlab-lsp"][2].write_text(d["jupyterlab-lsp"][1])
+
+    char_str = d["statusbar"][1]
+    lines = char_str.split('\n')
+    lines = lines[:-2]
+
+
+    if not disabled["statusbar"]:
+        lines.append(" " * 4 + '"visible": true')
+    else:
+        lines.append(" " * 4 + '"visible": false')
+    lines.append("}")
+    d["statusbar"][2].parent.mkdir(exist_ok=True, parents=True)
+    d["statusbar"][2].write_text('\n'.join(lines))
+    return
+
+
+def copy_ks(
+        reminders = reminders, 
+        settings = settings, 
+        keyset = "alt-single.js"
+    ):
+    """Copies a keyset from settings for use with JL.
+    """
+    p = reminders / ".jupyter/@jupyterlab/shortcuts-extension/"
+    p = p / "shortcuts.jupyterlab-settings"
+    p.parent.mkdir(exist_ok=True, parents=True)
+    p.write_text((settings / "keysets" / keyset).read_text())
+    return
+
+def copy_workspaces(reminders = reminders):
+    """Copy any saved workspaces with layouts for JupyterLab.
+    """
+    p = settings / ".jupyter/config/lab/workspaces/"
+    q = reminders / ".jupyter/config/lab/workspaces/"
+    q.mkdir(exist_ok=True, parents=True)
+    for r in p.iterdir(): 
+        if not r.name == ".DS_Store":
+            t = q / r.name
+            # print(f"{t = }")
+            # print(f"{r = }")
+            t.write_text(r.read_text())
+
+
+#############################################################################
+
+chdir(reminders)
+copy_base()
+enable_extensions()
+copy_extension_settings()
+copy_ks()
+copy_workspaces()

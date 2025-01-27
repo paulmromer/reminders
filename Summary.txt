@@ -1,0 +1,16 @@
+Summary
+Issues: 
+    - don't use bash5 - Fixed in reminders_final
+    - be careful about python vs python3
+        - for now, create python in /usr/local/bin
+        - create a script to do this? Or instructions? 
+    - bin <-> scripts
+    - how to setup shebang? 
+        -test PATH
+    - how to zip up the folder so it unzips correctly on win?
+
+I think that 
+#!/usr/bin/env python -X utf8
+will work if python is on PATH. Maybe not otherwise. 
+
+
