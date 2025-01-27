@@ -1,19 +1,19 @@
 Reminders:
 
-- The green prompt shows the current directory
-- To list all files in the current directory, use the alias 'la'
-- To move up to the parent directory, use '..'
-- To change to a subdirectory,
-    - enter part of its name then hit tab to see your options;
-    - or enter its full name and hit return.
-- To install a library from pypi.org, use
-        'which pip'
-    to determine which instance of pip is active, hence where any new
-    library will be installed. If this is what you want, then use
-        'pip install' + library_name.
-    If you always want this library installed, add it to the file
-    use the editor to add it to the 'requirements.txt' file in your
-    home directory.
+- The green prompt shows the current directoy
+- To list all files in the current directory, use the alias 'a'
+- To move up to the parent directory, use ..'
+- To change to a subdirecory,
+    - enter part of its name then hit tab to see your opions;
+    - or enter its full name and hit eturn.
+- To install a library from pypi.rg, use
+        'wich pip'
+    to determine which instance of pip is active, hence whee any new
+    library will be installed. If this is what you wan, then use
+        'pip install' + lbrary_name.
+    If you always want this library installed, add i to the file
+    use the editor to add it to the 'requirements.txt file in your
+    he directory.
 
-- With macOS Finder, use the key combination 'Shift + CMD + .' to 
+- With macOS Finder, use the key combination 'Shit + CMD + .' to 
     toggle on and off display for hidden files.
