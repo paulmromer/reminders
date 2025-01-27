@@ -1,0 +1,18 @@
+{
+    // Notebook
+    // @jupyterlab/notebook-extension:tracker
+    // Notebook settings.
+    // **************************************
+
+    // Automatically Start Preferred Kernel
+    // Whether to automatically start the preferred kernel.
+    "autoStartDefaultKernel": true,
+
+    // Shut down kernel
+    // Whether to shut down or not the kernel when closing a notebook.
+    "kernelShutdown": true,
+
+    // Scroll heading to top
+    // Whether to scroll heading to the document top when selecting it in the table of contents.
+    "scrollHeadingToTop": false
+}

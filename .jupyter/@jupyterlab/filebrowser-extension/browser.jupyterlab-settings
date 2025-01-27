@@ -1,0 +1,5 @@
+{
+    // When sorting by name, group notebooks before other files
+    // Whether to group the notebooks away from files
+    "sortNotebooksFirst": true
+}
