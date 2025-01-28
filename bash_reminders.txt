@@ -1,19 +1,55 @@
-Reminders:
-
-- The green prompt shows the current directy
-- To list all files in the current directory, use the alias a'
-- To move up to the parent directory, use..'
-- To change to a subdireory,
-    - enter part of its name then hit tab to see your oions;
-    - or enter its full name and hiteturn.
-- To install a library from pypirg, use
-        'ich pip'
-    to determine which instance of pip is active, hence whe any new
-    library will be installed. If this is what you wa, then use
-        'pip install' + brary_name.
-    If you always want this library installed, add  to the file
-    use the editor to add it to the 'requirements.tx file in your
-  e directory.
-
-- With macOS Finder, use the key combination 'Sht + CMD + .' to 
+Reminders:
+
+
+
+
+
+- The green prompt shows the current directy
+
+
+- To list all files in the current directory, use the alias a'
+
+
+- To move up to the parent directory, use..'
+
+
+- To change to a subdireory,
+
+
+    - enter part of its name then hit tab to see your oions;
+
+
+    - or enter its full name and hiteturn.
+
+
+- To install a library from pypirg, use
+
+
+        'which pip'
+
+
+    to determine which instance of pip is active, hence whe any new
+
+
+    library will be installed. If this is what you wa, then use
+
+
+        'pip install' + brary_name.
+
+
+    If you always want this library installed, add  to the file
+
+
+    use the editor to add it to the 'requirements.tx file in your
+
+
+  e directory.
+
+
+
+
+
+- With macOS Finder, use the key combination 'Sht + CMD + .' to 
+
+
     toggle on and off display for hidden files.
