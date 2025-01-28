@@ -1,5 +1,5 @@
-.venv
-/.jupyter
-ipynb_checkpoints
+/.venv/
+/.jupyter/
+/.ipynb_checkpoints/
 .DS_Store
-.virtual_documents
+/.virtual_documents/
