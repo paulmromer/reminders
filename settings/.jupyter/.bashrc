@@ -27,7 +27,7 @@ print_before_the_prompt () {
 
 
 PROMPT_COMMAND=print_before_the_prompt
-PS1="(.venv)-> "
+PS1="{VIRTUAL_ENV_PROMPT}-> "
 
 
 ################################## Aliases ##############################################

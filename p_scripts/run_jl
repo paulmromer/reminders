@@ -31,6 +31,6 @@ executble_s = str(executble)
 # Colon ok on Windows if using git-bash ???
 
 environ["PATH"] = executbles_s + ":" + environ["PATH"]
-run([ executble_s, "lab"])
+run([ executble_s, "lab", "--browser='chrome'"])
 
 
